@@ -54,7 +54,6 @@ cacheSolve <- function(fList, mat, ...) {
 
 ## These functions are used for testing makeCacheMatrix and cacheSolve only
 ## hilbert : generate a solveable n*n matrix (only useful up to 11x11)
-## identity: generates an n*n identity matrix
 ## checkit : verifies whether two matrices are inverse of eachother
 ## multicheck : creates a new n*n matrix, then prints, caches, solves, prints the solution, then verifies it
 
@@ -68,13 +67,6 @@ hilbert <- function(n=4L) {
         1 / outer(i - 1, i, "+")
 }
 
-identity <- function(n=4L) {
-        id <- matrix(rep(0,n^2),n,n)
-        for (i in 1:n) {
-                id[i,i] <- 1
-        }
-        return(id)
-}
 
 checkit <- function(mat1, mat2) {
         ## multiply mat1 by mat2 and compare with identity matrix of the same size
@@ -91,11 +83,11 @@ checkit <- function(mat1, mat2) {
                 m2 <- mat2
         }
         n <- dim(m1)[1]
-        ident <- identity(n)
+        ident <- diag(n)
         identical(round(m1 %*% m2),ident)
 }
 
-multicheck <- function(n) {
+testCacheSolve <- function(n) {
         a <- hilbert(n)
         #print(round(a,2))
 
@@ -103,7 +95,7 @@ multicheck <- function(n) {
         cs <- cacheSolve(cm)
 
         #print(round(cs,2))
-        ident <- identity(dim(a)[1])
+        ident <- diag(dim(a)[1])
         is_inverse <- checkit(a,cs)
         list(size = n, matrix1 = a, inverse = cs, identity = ident, is_inverse = is_inverse)
 }
